@@ -23,13 +23,6 @@ display_name="$1"
 # Id of the bug to pull the repo for
 bug_id="$2"
 
-# Third argument, a name for the target of this script (buggy, fixed, tested usually).
-# If none is given, this defaults to "latest", for testing purposes.
-target="$3"
-if [[ -z "$target" ]]; then
-	target="latest"
-fi
-
 # If the directory for that repository does not yet exist, exit
 if [[ ! -d "$list_dir/$display_name" ]]; then
 	echo "Cannot find repository with name '$display_name'"
@@ -46,13 +39,7 @@ else
 fi
 
 version_file="$list_dir/$display_name/$bug_id/.hasbugs_version"
-
-# The directory that the repository will be cloned into.
-if [[ "$target" == "latest" ]]; then
-	target_dir="${data_dir}/${display_name}"
-else
-	target_dir="${data_dir}/${display_name}-${bug_id}/${target}"
-fi
+target_dir="${data_dir}/${display_name}-${bug_id}/${target}"
 
 
 # Create the target directory and move into it.
@@ -65,8 +52,6 @@ cd "$(dirname $target_dir)"
 if [[ ! -d "$target_dir/.git" ]]; then
 	rm -rf "$target_dir"
 	echo "Cloning $repository_url (quietly)"
-	#TODO: Maybe we can add a "heuristic depth" here, such as the last 50 commits. I think for most bugs that works. 
-	#Short Update: I tried with 120, but that failed on Pandoc. Maybe it is necessary to get the whole history. ¯\_(ツ)_/¯
 	git clone -q "$repository_url" "$target_dir"
 else
 	echo "Already cloned repository"
@@ -87,30 +72,12 @@ fi
 echo "Using faulty commit: $fault_commit"
 echo "Using fixed commit: $fix_commit"
 
-# Set HEAD to the given commit if one is given
-if [[ "$target" == "buggy" ]]; then
-	echo "Resetting to faulty commit: ${fault_commit}"
-	git reset --hard
-	git checkout -q -f "$fault_commit"
-elif [[ "$target" == "fixed" ]]; then
-	echo "Resetting to fixed commit: ${fix_commit}"
-	git reset --hard
-	git checkout -q -f "$fix_commit"
-elif [[ "$target" == "tested" && "$patch_test" ]]; then
-	echo "Resetting to faulty commit and patching with test"
-	git reset --hard
-	git checkout -q -f "$fault_commit"
-
-	echo "Patching with patch file: ${patch_file}"
-	cp "${origin}/${patch_file}" ./
-	git apply "${patch_file}"
-elif [[ "$target" == "tested" ]]; then
-	echo "Resetting to fixed commit (with test?)"
-	git reset --hard
-	git checkout -q -f "$fix_commit"
-else
-	echo "Not resetting to any commit, using HEAD as it is"
-fi
+echo "Resetting to faulty commit and patching with test"
+git reset --hard
+git checkout -q -f "$fault_commit"
+echo "Patching with patch file: ${patch_file}"
+cp "${origin}/${patch_file}" ./
+git apply "${patch_file}"
 
 
 # Remove the Git history if required
@@ -121,10 +88,4 @@ else
 	echo "Keeping Git history for ${repository_name}"
 fi
 
-
-# Move the Dockerfile in.
-echo "Moving the HasBugs Dockerfile and Dockerignore to project repository"
-cp "$docker_file" ./
 cp "$version_file" ./
-touch "HASBUGS_DOCKERFILE.dockerignore"
-

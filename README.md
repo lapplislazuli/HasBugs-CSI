@@ -1,3 +1,24 @@
+# HasBugs CSI 
+
+Fork of Hasbugs for used in a specific experiment (to be announced.)
+Many datapoints have been removed and only their tested version is pulled.
+
+To get data:
+
+```sh
+cd tools
+./get-all-datapoints.sh
+```
+
+Cleaning:
+
+```
+rm -rf data
+```
+
+*Legacy* Readme below for more info.
+
+
 # HasBugs - Handpicked Haskell Bugs
 
 We try to provide a fresh dataset in the fashion of [Defects4J](https://github.com/rjust/defects4j) to evaluate tasks such as fault localization, program repair and test generation.
