@@ -1,6 +1,6 @@
 {
     "id": "pandoc-7",
-    "repositoryurl": "git@github.com:jgm/pandoc",
+    "repositoryurl": "https://github.com/jgm/pandoc",
     "repository": "pandoc",
     "license": "GPLv2",
     "hasbugsversion":"1.0.0",

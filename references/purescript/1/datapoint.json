@@ -1,6 +1,6 @@
 {
     "id": "purescript-1",
-    "repositoryurl": "git@github.com:purescript/purescript",
+    "repositoryurl": "https://github.com/purescript/purescript",
     "repository": "purescript",
     "license": "Custom Copyleft",
     "hasbugsversion":"1.0.0",

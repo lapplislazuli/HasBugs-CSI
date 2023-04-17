@@ -1,6 +1,6 @@
 {
     "id": "cabal-2",
-    "repositoryurl": "git@github.com:haskell/cabal",
+    "repositoryurl": "https://github.com/haskell/cabal",
     "repository": "cabal",
     "license": "BSD-3",
     "hasbugsversion":"1.0.0",

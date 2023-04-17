@@ -1,6 +1,6 @@
 {
     "id": "hledger-4",
-    "repositoryurl": "git@github.com:simonmichael/hledger",
+    "repositoryurl": "https://github.com/simonmichael/hledger",
     "repository": "hledger",
     "license": "GPL-3.0",
     "hasbugsversion":"1.0.0",
